@@ -1,7 +1,5 @@
 import { createClient } from './supabase/client'
-import type { BookCondition, ContactPreference, Database } from './supabase/types'
-
-type SubmissionInsert = Database['public']['Tables']['submissions']['Insert']
+import type { BookCondition, ContactPreference } from './supabase/types'
 
 export interface SubmitBookInput {
   photos: File[]
@@ -21,18 +19,26 @@ export async function submitBook(input: SubmitBookInput): Promise<SubmitBookResu
 
   // 1. Upload photos to Supabase Storage
   const photoUrls: string[] = []
-  for (const photo of input.photos) {
-    const ext = photo.name.split('.').pop() ?? 'jpg'
-    const path = `submissions/${crypto.randomUUID()}.${ext}`
-    const { error } = await supabase.storage
-      .from('book-photos')
-      .upload(path, photo, { contentType: photo.type, upsert: false })
-    if (error) throw new Error(`Photo upload failed: ${error.message}`)
-    photoUrls.push(path)
+  try {
+    for (const photo of input.photos) {
+      const ext = photo.name.split('.').pop() ?? 'jpg'
+      const path = `submissions/${crypto.randomUUID()}.${ext}`
+      const { error } = await supabase.storage
+        .from('book-photos')
+        .upload(path, photo, { contentType: photo.type, upsert: false })
+      if (error) throw new Error(`Photo upload failed: ${error.message}`)
+      photoUrls.push(path)
+    }
+  } catch (err) {
+    // Clean up any photos already uploaded before the failure
+    if (photoUrls.length > 0) {
+      await supabase.storage.from('book-photos').remove(photoUrls)
+    }
+    throw err
   }
 
   // 2. Insert submission record
-  const insertData: SubmissionInsert = {
+  const insertData = {
     photo_urls: photoUrls,
     contact_preference: input.contact_preference,
     contact_value: input.contact_value.trim(),
