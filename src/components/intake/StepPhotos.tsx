@@ -2,7 +2,7 @@
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { stepPhotosSchema, type StepPhotosData } from '@/lib/validations'
 
 interface StepPhotosProps {
@@ -15,8 +15,18 @@ const MAX_SIZE_BYTES = 10 * 1024 * 1024 // 10MB
 
 export function StepPhotos({ initialPhotos, onComplete }: StepPhotosProps) {
   const [photos, setPhotos] = useState<File[]>(initialPhotos)
+  const [photoUrls, setPhotoUrls] = useState<string[]>(
+    initialPhotos.map((f) => URL.createObjectURL(f))
+  )
   const [uploadError, setUploadError] = useState<string | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    return () => {
+      photoUrls.forEach((url) => URL.revokeObjectURL(url))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const {
     handleSubmit,
@@ -42,6 +52,9 @@ export function StepPhotos({ initialPhotos, onComplete }: StepPhotosProps) {
       }
     }
 
+    const newUrls = files.slice(0, 3 - photos.length).map((f) => URL.createObjectURL(f))
+    const updatedUrls = [...photoUrls, ...newUrls].slice(0, 3)
+    setPhotoUrls(updatedUrls)
     const updated = [...photos, ...files].slice(0, 3)
     setPhotos(updated)
     setValue('photos', updated, { shouldValidate: true })
@@ -50,6 +63,8 @@ export function StepPhotos({ initialPhotos, onComplete }: StepPhotosProps) {
   }
 
   function removePhoto(index: number) {
+    URL.revokeObjectURL(photoUrls[index])
+    setPhotoUrls(photoUrls.filter((_, i) => i !== index))
     const updated = photos.filter((_, i) => i !== index)
     setPhotos(updated)
     setValue('photos', updated, { shouldValidate: true })
@@ -93,7 +108,7 @@ export function StepPhotos({ initialPhotos, onComplete }: StepPhotosProps) {
           {photos.map((photo, i) => (
             <div key={i} className="relative w-24 h-24">
               <img
-                src={URL.createObjectURL(photo)}
+                src={photoUrls[i]}
                 alt={`Photo ${i + 1}`}
                 className="w-24 h-24 object-cover rounded-lg border border-gray-200"
               />
