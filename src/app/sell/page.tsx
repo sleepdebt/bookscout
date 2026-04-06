@@ -1,12 +1,9 @@
+'use client'
+
 import { WizardShell } from '@/components/intake/WizardShell'
 import { StepPhotos } from '@/components/intake/StepPhotos'
 import { StepContact } from '@/components/intake/StepContact'
 import { StepReview } from '@/components/intake/StepReview'
-
-export const metadata = {
-  title: 'Sell Your Book — BookScout',
-  description: 'Submit your textbook for a fast cash offer. No account needed.',
-}
 
 export default function SellPage() {
   return (
