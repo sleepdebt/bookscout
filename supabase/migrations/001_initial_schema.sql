@@ -53,7 +53,7 @@ create table submissions (
 
   constraint notes_max_length check (length(notes) <= 200),
   constraint isbn_format check (
-    isbn is null or (length(isbn) in (10, 13) and isbn ~ '^\d+$')
+    isbn is null or (isbn ~ '^\d{9}[\dX]$' or isbn ~ '^\d{13}$')
   )
 );
 
@@ -98,7 +98,10 @@ create policy "seller_read_submissions" on submissions
   for select to authenticated using (true);
 
 create policy "seller_update_submissions" on submissions
-  for update to authenticated using (true);
+  for update to authenticated using (true) with check (true);
+
+create policy "seller_delete_submissions" on submissions
+  for delete to authenticated using (true);
 
 -- Only seller can manage pricing rules
 create policy "seller_manage_pricing_rules" on pricing_rules
@@ -116,7 +119,10 @@ values (
 
 -- Public can upload to book-photos (students don't auth)
 create policy "public_upload_photos" on storage.objects
-  for insert to anon with check (bucket_id = 'book-photos');
+  for insert to anon with check (
+    bucket_id = 'book-photos' and
+    name like 'submissions/%'
+  );
 
 -- Only seller can read/delete photos
 create policy "seller_read_photos" on storage.objects
