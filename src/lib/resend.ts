@@ -37,9 +37,26 @@ export function buildOfferEmail(params: {
   title: string | null
   final_offer: number
   seller_email: string
+  response_token?: string | null
+  app_url?: string
 }): { subject: string; text: string } {
   const book = params.title ?? 'your book'
   const subject = `Your BookScout offer — ${params.reference_number}`
+
+  const responseLines: string[] = []
+  if (params.response_token && params.app_url) {
+    const base = `${params.app_url}/api/respond?token=${params.response_token}`
+    responseLines.push(
+      `Accept this offer:`,
+      `${base}&action=accept`,
+      ``,
+      `Decline this offer:`,
+      `${base}&action=decline`,
+    )
+  } else {
+    responseLines.push(`To accept or decline, reply to this email or contact us at ${params.seller_email}.`)
+  }
+
   const text = [
     `Hi,`,
     ``,
@@ -47,7 +64,7 @@ export function buildOfferEmail(params: {
     ``,
     `Our offer: $${params.final_offer.toFixed(2)}`,
     ``,
-    `To accept or decline, reply to this email or contact us at ${params.seller_email}.`,
+    ...responseLines,
     ``,
     `This offer is valid for 7 days.`,
     ``,

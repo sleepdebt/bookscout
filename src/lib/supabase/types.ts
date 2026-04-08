@@ -40,6 +40,7 @@ export type Submission = {
   seller_notes: string | null
   responded_at: string | null
   batch_id: string | null
+  response_token: string | null
 }
 
 export type SubmissionInsert = {
@@ -70,6 +71,7 @@ export type SubmissionInsert = {
   seller_notes?: string | null
   responded_at?: string | null
   batch_id?: string | null
+  response_token?: string | null
 }
 
 export type PricingRulesRow = {
@@ -80,6 +82,15 @@ export type PricingRulesRow = {
   avoid_amazon_present: boolean
   category_overrides: Record<string, unknown>
   updated_at: string
+}
+
+export type SubmissionEvent = {
+  id: string
+  submission_id: string
+  event_type: string
+  old_status: string | null
+  new_status: string | null
+  created_at: string
 }
 
 export interface Database {
@@ -95,6 +106,12 @@ export interface Database {
         Row: PricingRulesRow
         Insert: Partial<PricingRulesRow>
         Update: Partial<PricingRulesRow>
+        Relationships: []
+      }
+      submission_events: {
+        Row: SubmissionEvent
+        Insert: Omit<SubmissionEvent, 'id' | 'created_at'>
+        Update: Partial<SubmissionEvent>
         Relationships: []
       }
     }

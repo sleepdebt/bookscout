@@ -59,27 +59,31 @@ export function WizardShell({ children }: WizardShellProps) {
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      {/* Progress bar */}
-      <div className="px-4 pt-6 pb-4">
-        <div className="flex gap-2 mb-3">
-          {STEP_LABELS.map((label, i) => (
-            <div key={label} className="flex-1">
-              <div
-                className={`h-1 rounded-full transition-colors ${
-                  i + 1 <= step ? 'bg-blue-600' : 'bg-gray-200'
-                }`}
-              />
+      <div className="w-full max-w-lg mx-auto flex flex-col flex-1">
+        {/* Progress bar — hidden on step 1 so the hero card fills the screen */}
+        {step > 1 && (
+          <div className="px-4 pt-6 pb-4">
+            <div className="flex gap-2 mb-3">
+              {STEP_LABELS.map((label, i) => (
+                <div key={label} className="flex-1">
+                  <div
+                    className={`h-1 rounded-full transition-colors ${
+                      i + 1 <= step ? 'bg-blue-600' : 'bg-gray-200'
+                    }`}
+                  />
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <p className="text-xs text-gray-500 font-medium">
-          Step {step} of 3 — {STEP_LABELS[step - 1]}
-        </p>
-      </div>
+            <p className="text-xs text-gray-500 font-medium">
+              Step {step} of 3 — {STEP_LABELS[step - 1]}
+            </p>
+          </div>
+        )}
 
-      {/* Step content */}
-      <div className="flex-1 px-4 pb-8">
-        {children({ step, state, onStep1Complete, onStep2Complete, onBack })}
+        {/* Step content */}
+        <div className={`flex-1 px-4 pb-8 ${step === 1 ? 'pt-4' : ''}`}>
+          {children({ step, state, onStep1Complete, onStep2Complete, onBack })}
+        </div>
       </div>
     </div>
   )

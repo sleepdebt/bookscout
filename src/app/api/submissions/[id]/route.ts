@@ -39,6 +39,14 @@ export async function PATCH(
   }
 
   const service = createServiceClient()
+
+  // Generate a fresh response token whenever an offer is sent
+  let responseToken: string | null = null
+  if (body.status === 'offer_sent') {
+    responseToken = crypto.randomUUID()
+    update.response_token = responseToken
+  }
+
   const { error } = await service
     .from('submissions')
     .update(update)
@@ -48,7 +56,7 @@ export async function PATCH(
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 
-  // Send offer email when status is set to offer_sent
+  // Send offer email with accept/decline links when status is set to offer_sent
   if (body.status === 'offer_sent') {
     const { data: sub } = await service
       .from('submissions')
@@ -58,17 +66,19 @@ export async function PATCH(
 
     if (sub?.contact_preference === 'email' && sub.contact_value && sub.final_offer != null) {
       const sellerEmail = process.env.SELLER_EMAIL ?? ''
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
       const { subject, text } = buildOfferEmail({
         reference_number: sub.reference_number,
         title: sub.title,
         final_offer: Number(sub.final_offer),
         seller_email: sellerEmail,
+        response_token: responseToken,
+        app_url: appUrl,
       })
 
       try {
         await sendEmail({ to: sub.contact_value, subject, text, replyTo: sellerEmail })
       } catch (err) {
-        // Log but don't fail the request — the DB update already succeeded
         console.error('[notify-student] Email failed:', err)
         return NextResponse.json({ ok: true, email_error: String(err) })
       }
