@@ -7,7 +7,7 @@ export type SubmissionStatus =
   | 'accepted'
   | 'declined'
 
-export type ContactPreference = 'sms' | 'email'
+export type ContactPreference = 'email'
 export type BookCondition = 'like_new' | 'good' | 'acceptable' | 'poor'
 export type IsbnConfidence = 'low' | 'medium' | 'high'
 
@@ -21,6 +21,7 @@ export type Submission = {
   condition: BookCondition
   isbn: string | null
   notes: string | null
+  student_name: string | null
   created_at: string
   isbn_extracted: string | null
   isbn_confidence: IsbnConfidence | null
@@ -38,6 +39,7 @@ export type Submission = {
   final_offer: number | null
   seller_notes: string | null
   responded_at: string | null
+  batch_id: string | null
 }
 
 export type SubmissionInsert = {
@@ -50,6 +52,7 @@ export type SubmissionInsert = {
   condition: BookCondition
   isbn?: string | null
   notes?: string | null
+  student_name?: string | null
   isbn_extracted?: string | null
   isbn_confidence?: IsbnConfidence | null
   title?: string | null
@@ -66,6 +69,17 @@ export type SubmissionInsert = {
   final_offer?: number | null
   seller_notes?: string | null
   responded_at?: string | null
+  batch_id?: string | null
+}
+
+export type PricingRulesRow = {
+  id: string
+  target_roi_min: number
+  max_buy_price: number | null
+  slow_mover_rank_threshold: number | null
+  avoid_amazon_present: boolean
+  category_overrides: Record<string, unknown>
+  updated_at: string
 }
 
 export interface Database {
@@ -75,6 +89,12 @@ export interface Database {
         Row: Submission
         Insert: SubmissionInsert
         Update: Partial<Submission>
+        Relationships: []
+      }
+      pricing_rules: {
+        Row: PricingRulesRow
+        Insert: Partial<PricingRulesRow>
+        Update: Partial<PricingRulesRow>
         Relationships: []
       }
     }

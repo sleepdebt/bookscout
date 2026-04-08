@@ -1,64 +1,56 @@
 'use client'
 
 import { useState } from 'react'
-import type { StepPhotosData, StepContactData, StepReviewData } from '@/lib/validations'
+import type { StepContactData } from '@/lib/validations'
+import type { BookCondition } from '@/lib/supabase/types'
 
 export type WizardStep = 1 | 2 | 3
 
-export interface WizardState {
+export interface BookEntry {
   photos: File[]
-  contact_preference: 'sms' | 'email'
-  contact_value: string
-  condition: 'like_new' | 'good' | 'acceptable' | 'poor' | ''
+  condition: BookCondition
   isbn: string
   notes: string
+}
+
+export interface WizardState {
+  contact_preference: 'email'
+  contact_value: string
+  books: BookEntry[]
 }
 
 interface WizardShellProps {
   children: (props: {
     step: WizardStep
     state: WizardState
-    onStep1Complete: (data: StepPhotosData) => void
-    onStep2Complete: (data: StepContactData) => void
-    onStep3Complete: (data: StepReviewData) => void
+    onStep1Complete: (data: StepContactData) => void
+    onStep2Complete: (books: BookEntry[]) => void
     onBack: () => void
   }) => React.ReactNode
 }
 
-const STEP_LABELS = ['Photos', 'Contact', 'Review']
+const STEP_LABELS = ['Contact', 'Books', 'Review']
 
 export function WizardShell({ children }: WizardShellProps) {
   const [step, setStep] = useState<WizardStep>(1)
   const [state, setState] = useState<WizardState>({
-    photos: [],
-    contact_preference: 'sms',
+    contact_preference: 'email',
     contact_value: '',
-    condition: '',
-    isbn: '',
-    notes: '',
+    books: [],
   })
 
-  function onStep1Complete(data: StepPhotosData) {
-    setState((s) => ({ ...s, photos: data.photos }))
-    setStep(2)
-  }
-
-  function onStep2Complete(data: StepContactData) {
+  function onStep1Complete(data: StepContactData) {
     setState((s) => ({
       ...s,
       contact_preference: data.contact_preference,
       contact_value: data.contact_value,
-      condition: data.condition,
     }))
-    setStep(3)
+    setStep(2)
   }
 
-  function onStep3Complete(data: StepReviewData) {
-    setState((s) => ({
-      ...s,
-      isbn: data.isbn ?? '',
-      notes: data.notes ?? '',
-    }))
+  function onStep2Complete(books: BookEntry[]) {
+    setState((s) => ({ ...s, books }))
+    setStep(3)
   }
 
   function onBack() {
@@ -87,7 +79,7 @@ export function WizardShell({ children }: WizardShellProps) {
 
       {/* Step content */}
       <div className="flex-1 px-4 pb-8">
-        {children({ step, state, onStep1Complete, onStep2Complete, onStep3Complete, onBack })}
+        {children({ step, state, onStep1Complete, onStep2Complete, onBack })}
       </div>
     </div>
   )

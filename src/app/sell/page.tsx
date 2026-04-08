@@ -1,30 +1,26 @@
 'use client'
 
 import { WizardShell } from '@/components/intake/WizardShell'
-import { StepPhotos } from '@/components/intake/StepPhotos'
 import { StepContact } from '@/components/intake/StepContact'
+import { StepBooks } from '@/components/intake/StepBooks'
 import { StepReview } from '@/components/intake/StepReview'
 
 export default function SellPage() {
   return (
     <WizardShell>
-      {({ step, state, onStep1Complete, onStep2Complete, onStep3Complete, onBack }) => {
+      {({ step, state, onStep1Complete, onStep2Complete, onBack }) => {
         if (step === 1) {
           return (
-            <StepPhotos
-              initialPhotos={state.photos}
+            <StepContact
+              initialData={{ contact_value: state.contact_value }}
               onComplete={onStep1Complete}
             />
           )
         }
         if (step === 2) {
           return (
-            <StepContact
-              initialData={{
-                contact_preference: state.contact_preference,
-                contact_value: state.contact_value,
-                condition: state.condition,
-              }}
+            <StepBooks
+              initialBooks={state.books}
               onComplete={onStep2Complete}
               onBack={onBack}
             />

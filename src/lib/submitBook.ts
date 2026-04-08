@@ -8,6 +8,7 @@ export interface SubmitBookInput {
   condition: BookCondition
   isbn?: string
   notes?: string
+  batch_id?: string
 }
 
 export interface SubmitBookResult {
@@ -45,6 +46,7 @@ export async function submitBook(input: SubmitBookInput): Promise<SubmitBookResu
     condition: input.condition,
     isbn: input.isbn?.trim() || null,
     notes: input.notes?.trim() || null,
+    ...(input.batch_id ? { batch_id: input.batch_id } : {}),
   }
   const { data, error } = await supabase
     .from('submissions')

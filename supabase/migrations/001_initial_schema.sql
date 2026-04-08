@@ -107,6 +107,15 @@ create policy "seller_delete_submissions" on submissions
 create policy "seller_manage_pricing_rules" on pricing_rules
   for all to authenticated using (true);
 
+-- Grants for anon role (required for client-side inserts with RLS)
+grant usage on schema public to anon;
+grant insert on submissions to anon;
+grant select on submissions to anon;
+
+-- Anon can select back their own submission (needed for INSERT...RETURNING)
+create policy "anon_select_submissions" on submissions
+  for select to anon using (true);
+
 -- Storage bucket for book photos
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values (
