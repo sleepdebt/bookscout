@@ -210,8 +210,9 @@ export function WizardShell({ children }: WizardShellProps) {
   if (step === 1) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={pixelBgStyle}>
-        <div className="w-full max-w-lg px-4 py-8">
+        <div className="w-full max-w-lg px-4 py-8 flex flex-col items-center gap-6">
           {children({ step, state, onStep1Complete, onStep2Complete, onBack })}
+          <img src="/ohio_made.webp" alt="Ohio Made" className="h-10 opacity-30" />
         </div>
       </div>
     )
