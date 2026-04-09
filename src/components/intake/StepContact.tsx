@@ -45,7 +45,7 @@ export function StepContact({ initialData, onComplete }: StepContactProps) {
           </div>
           {/* Bottom text */}
           <div>
-          <p className="text-2xl font-bold text-white uppercase tracking-widest mb-1" style={{ fontFamily: 'var(--font-bebas-neue)' }}>
+          <p className="text-2xl font-bold text-white uppercase tracking-widest mb-1" style={{ fontFamily: 'var(--font-poller-one)' }}>
             BookScout
           </p>
           <p className="text-sm text-blue-200/90 leading-snug mb-2">
