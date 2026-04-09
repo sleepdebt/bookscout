@@ -89,9 +89,9 @@ values (0.50, true);
 alter table submissions enable row level security;
 alter table pricing_rules enable row level security;
 
--- Students (anonymous) can insert submissions
+-- Students (anonymous) can insert submissions; authenticated staff may also submit while testing
 create policy "public_insert_submissions" on submissions
-  for insert to anon with check (true);
+  for insert to anon, authenticated with check (true);
 
 -- Only authenticated seller can read/update submissions
 create policy "seller_read_submissions" on submissions
@@ -126,9 +126,9 @@ values (
   array['image/jpeg', 'image/png', 'image/heic', 'image/heif', 'image/webp']
 );
 
--- Public can upload to book-photos (students don't auth)
+-- Public can upload to book-photos (students don't auth; staff may also upload while authenticated)
 create policy "public_upload_photos" on storage.objects
-  for insert to anon with check (
+  for insert to anon, authenticated with check (
     bucket_id = 'book-photos' and
     name like 'submissions/%'
   );

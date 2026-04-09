@@ -46,22 +46,26 @@ const emptyBook = (): ActiveBook => ({
 export function StepBooks({ initialBooks, onComplete, onBack }: StepBooksProps) {
   const [books, setBooks] = useState<BookEntry[]>(initialBooks)
   const [active, setActive] = useState<ActiveBook>(emptyBook())
-  const [uploadError, setUploadError] = useState<string | null>(null)
+  const [formatError, setFormatError] = useState<string | null>(null)
+  const [sizeError, setSizeError] = useState<string | null>(null)
   const [formError, setFormError] = useState<string | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setUploadError(null)
+    setFormatError(null)
+    setSizeError(null)
     const files = Array.from(e.target.files ?? [])
-    for (const file of files) {
-      if (!ACCEPTED_TYPES.includes(file.type)) {
-        setUploadError('Only JPEG, PNG, and HEIC photos are accepted.')
-        return
-      }
-      if (file.size > MAX_SIZE_BYTES) {
-        setUploadError('Each photo must be under 10MB.')
-        return
-      }
+    const invalidFormat = files.find((f) => !ACCEPTED_TYPES.includes(f.type))
+    if (invalidFormat) {
+      setFormatError(`"${invalidFormat.name}" isn't supported. Use JPEG, PNG, HEIC, HEIF, or WebP.`)
+      e.target.value = ''
+      return
+    }
+    const oversized = files.find((f) => f.size > MAX_SIZE_BYTES)
+    if (oversized) {
+      setSizeError(`"${oversized.name}" is too large. Each photo must be under 10 MB.`)
+      e.target.value = ''
+      return
     }
     const toAdd = files.slice(0, 3 - active.photos.length)
     const newUrls = toAdd.map((f) => URL.createObjectURL(f))
@@ -71,6 +75,11 @@ export function StepBooks({ initialBooks, onComplete, onBack }: StepBooksProps) 
       photoUrls: [...a.photoUrls, ...newUrls].slice(0, 3),
     }))
     e.target.value = ''
+  }
+
+  function clearUploadErrors() {
+    setFormatError(null)
+    setSizeError(null)
   }
 
   function removePhoto(index: number) {
@@ -161,12 +170,12 @@ export function StepBooks({ initialBooks, onComplete, onBack }: StepBooksProps) 
         {/* Photo upload */}
         <div>
           <div
-            onClick={() => inputRef.current?.click()}
+            onClick={() => { clearUploadErrors(); inputRef.current?.click() }}
             className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center cursor-pointer hover:border-blue-400 transition-colors"
           >
             <p className="text-3xl mb-1">📷</p>
             <p className="text-sm font-medium text-gray-700">Tap to add photos</p>
-            <p className="text-xs text-gray-400 mt-1">Up to 3 · JPEG, PNG, or HEIC</p>
+            <p className="text-xs text-gray-400 mt-1">Up to 3 · JPEG, PNG, HEIC, HEIF, or WebP · max 10 MB each</p>
             <input
               ref={inputRef}
               type="file"
@@ -177,7 +186,16 @@ export function StepBooks({ initialBooks, onComplete, onBack }: StepBooksProps) 
               className="hidden"
             />
           </div>
-          {uploadError && <p className="text-sm text-red-600 mt-1">{uploadError}</p>}
+          {formatError && (
+            <p className="text-sm text-red-600 mt-1.5 flex items-start gap-1">
+              <span className="mt-px">⚠️</span> {formatError}
+            </p>
+          )}
+          {sizeError && (
+            <p className="text-sm text-red-600 mt-1.5 flex items-start gap-1">
+              <span className="mt-px">⚠️</span> {sizeError}
+            </p>
+          )}
 
           {active.photos.length > 0 && (
             <div className="flex gap-2 mt-3">

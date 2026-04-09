@@ -25,16 +25,11 @@ export function StepContact({ initialData, onComplete }: StepContactProps) {
   })
 
   return (
-    <form onSubmit={handleSubmit(onComplete)} className="flex flex-col gap-6">
+    <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
+    <form onSubmit={handleSubmit(onComplete)} className="flex flex-col">
 
-      {/* Hero card */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl px-6 py-10 text-center">
-        {/* Decorative background circles */}
-        <div className="absolute -top-6 -right-6 w-32 h-32 rounded-full bg-white/5" />
-        <div className="absolute -bottom-8 -left-8 w-40 h-40 rounded-full bg-white/5" />
-        <div className="absolute top-8 right-10 w-10 h-10 rounded-full bg-white/10" />
-        <div className="absolute bottom-10 left-10 w-6 h-6 rounded-full bg-white/10" />
-
+      {/* Hero card — bleeds to modal edges at top */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-blue-600 to-blue-700 px-6 py-10 text-center">
         {/* Book icon badge */}
         <div className="relative flex justify-center mb-5">
           <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
@@ -66,7 +61,7 @@ export function StepContact({ initialData, onComplete }: StepContactProps) {
       </div>
 
       {/* Form section */}
-      <div className="space-y-4">
+      <div className="px-6 pt-6 pb-2 space-y-4">
         <div>
           <p className="text-sm font-medium text-gray-700 mb-0.5">Where should we send your offer?</p>
           <p className="text-xs text-gray-400">We'll email you within 4 hours with an offer or a pass.</p>
@@ -89,13 +84,16 @@ export function StepContact({ initialData, onComplete }: StepContactProps) {
         </div>
       </div>
 
-      <button
-        type="submit"
-        className="w-full py-4 bg-blue-600 text-white font-semibold rounded-xl text-base hover:bg-blue-700 active:bg-blue-800 transition-colors mt-auto"
-      >
-        Get Started
-      </button>
+      <div className="px-6 pb-6 pt-2">
+        <button
+          type="submit"
+          className="w-full py-4 bg-blue-600 text-white font-semibold rounded-xl text-base hover:bg-blue-700 active:bg-blue-800 transition-colors"
+        >
+          Get Started
+        </button>
+      </div>
 
     </form>
+    </div>
   )
 }
