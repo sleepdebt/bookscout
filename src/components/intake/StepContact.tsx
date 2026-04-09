@@ -28,35 +28,38 @@ export function StepContact({ initialData, onComplete }: StepContactProps) {
     <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
     <form onSubmit={handleSubmit(onComplete)} className="flex flex-col">
 
-      {/* Hero card — bleeds to modal edges at top */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-blue-600 to-blue-700 px-6 py-10 text-center">
-        {/* Book icon badge */}
-        <div className="relative flex justify-center mb-5">
+      {/* Hero image — bleeds to modal edges at top */}
+      <div className="relative overflow-hidden">
+        <img
+          src="/hero_books.webp"
+          alt="Stack of college textbooks"
+          className="w-full object-cover h-52"
+        />
+        {/* Overlay with text */}
+        <div className="absolute inset-0 bg-gradient-to-t from-blue-900/100 via-blue-900/75 to-blue-900/45 flex flex-col items-center justify-between px-6 pt-6 pb-5 text-center">
+          {/* Book icon badge */}
           <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
             <svg className="w-9 h-9 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
             </svg>
           </div>
-        </div>
-
-        {/* Brand + headline */}
-        <p className="relative text-xs font-semibold text-blue-200 uppercase tracking-widest mb-2">
-          BookScout
-        </p>
-        <h1 className="relative text-2xl font-bold text-white leading-snug mb-2">
-          Get cash for your<br />textbooks. Fast.
-        </h1>
-        <p className="relative text-sm text-blue-100/80">
-          No account needed — we come to you.
-        </p>
-
-        {/* Feature pills */}
-        <div className="relative flex justify-center gap-2 mt-5 flex-wrap">
-          {['4-hr offers', 'Campus pickup', 'Venmo, Zelle & more'].map((label) => (
-            <span key={label} className="inline-flex items-center px-3 py-1 rounded-full bg-white/15 text-white text-xs font-medium">
-              {label}
-            </span>
-          ))}
+          {/* Bottom text */}
+          <div>
+          <p className="text-2xl font-bold text-white uppercase tracking-widest mb-1" style={{ fontFamily: 'var(--font-bebas-neue)' }}>
+            BookScout
+          </p>
+          <p className="text-sm text-blue-200/90 leading-snug mb-2">
+            Get cash for your textbooks. Fast.
+          </p>
+          {/* Feature pills */}
+          <div className="flex justify-center gap-2 flex-wrap">
+            {['4-hr offers', 'Campus pickup', 'Venmo, Zelle & more'].map((label) => (
+              <span key={label} className="inline-flex items-center px-3 py-1 rounded-full bg-white/15 text-white text-xs font-medium">
+                {label}
+              </span>
+            ))}
+          </div>
+          </div>
         </div>
       </div>
 
