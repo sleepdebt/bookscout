@@ -75,6 +75,8 @@ export async function POST(req: NextRequest) {
     max_buy_price: null,
     slow_mover_rank_threshold: null,
     avoid_amazon_present: true,
+    amazon_fee_rate: 0.15,
+    amazon_closing_fee: 1.80,
     category_overrides: {},
   }
 
