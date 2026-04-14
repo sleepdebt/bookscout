@@ -123,7 +123,7 @@ export async function POST(req: NextRequest) {
       .from('submissions')
       .update({
         isbn_confidence: 'low',
-        claude_response: claudeData,
+        claude_response: claudeData as unknown as import('@/lib/supabase/types').Json,
       })
       .eq('id', submissionId)
 
@@ -138,7 +138,7 @@ export async function POST(req: NextRequest) {
     .update({
       isbn_extracted: isbn ?? null,
       isbn_confidence: confidence,
-      claude_response: claudeData,
+      claude_response: claudeData as unknown as import('@/lib/supabase/types').Json,
     })
     .eq('id', submissionId)
 
