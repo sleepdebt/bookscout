@@ -380,3 +380,4 @@ export const Constants = {
 // Convenience aliases for commonly used enum types
 export type SubmissionStatus = Database["public"]["Enums"]["submission_status"]
 export type BookCondition = Database["public"]["Enums"]["book_condition"]
+export type ContactPreference = Database["public"]["Enums"]["contact_preference"]
