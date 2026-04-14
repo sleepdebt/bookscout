@@ -10,8 +10,11 @@ const STATUSES: { value: SubmissionStatus; label: string }[] = [
   { value: 'unidentifiable', label: 'Unidentifiable' },
   { value: 'offer_sent',     label: 'Offer Sent' },
   { value: 'pass_sent',      label: 'Pass Sent' },
-  { value: 'accepted',       label: 'Accepted' },
-  { value: 'declined',       label: 'Declined' },
+]
+
+const READONLY_STATUSES: { value: SubmissionStatus; label: string }[] = [
+  { value: 'accepted', label: 'Accepted' },
+  { value: 'declined', label: 'Declined' },
 ]
 
 interface Props {
@@ -63,15 +66,22 @@ export function OfferForm({ submissionId, initialStatus, initialOffer, initialNo
     <form onSubmit={handleSave} className="space-y-4">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-        <select
-          value={status}
-          onChange={e => setStatus(e.target.value as SubmissionStatus)}
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900"
-        >
-          {STATUSES.map(s => (
-            <option key={s.value} value={s.value}>{s.label}</option>
-          ))}
-        </select>
+        {READONLY_STATUSES.some(s => s.value === status) ? (
+          <div className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-500 bg-gray-50">
+            {READONLY_STATUSES.find(s => s.value === status)?.label}
+            <span className="ml-2 text-xs text-gray-400">(set by seller)</span>
+          </div>
+        ) : (
+          <select
+            value={status}
+            onChange={e => setStatus(e.target.value as SubmissionStatus)}
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900"
+          >
+            {STATUSES.map(s => (
+              <option key={s.value} value={s.value}>{s.label}</option>
+            ))}
+          </select>
+        )}
       </div>
 
       <div>
