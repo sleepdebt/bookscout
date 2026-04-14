@@ -10,6 +10,7 @@ const STATUSES: { value: SubmissionStatus; label: string }[] = [
   { value: 'unidentifiable', label: 'Unidentifiable' },
   { value: 'offer_sent',     label: 'Offer Sent' },
   { value: 'pass_sent',      label: 'Pass Sent' },
+  { value: 'paid',           label: 'Paid' },
 ]
 
 const READONLY_STATUSES: { value: SubmissionStatus; label: string }[] = [

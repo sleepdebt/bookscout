@@ -6,6 +6,7 @@ export type SubmissionStatus =
   | 'pass_sent'
   | 'accepted'
   | 'declined'
+  | 'paid'
 
 export type ContactPreference = 'email'
 export type BookCondition = 'like_new' | 'good' | 'acceptable' | 'poor'
