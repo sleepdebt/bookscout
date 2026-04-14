@@ -6,6 +6,8 @@ interface PatchBody {
   max_buy_price?: number | null
   slow_mover_rank_threshold?: number | null
   avoid_amazon_present?: boolean
+  amazon_fee_rate?: number
+  amazon_closing_fee?: number
 }
 
 export async function GET() {
@@ -45,6 +47,8 @@ export async function PATCH(req: NextRequest) {
   if (body.max_buy_price !== undefined) update.max_buy_price = body.max_buy_price
   if (body.slow_mover_rank_threshold !== undefined) update.slow_mover_rank_threshold = body.slow_mover_rank_threshold
   if (body.avoid_amazon_present !== undefined) update.avoid_amazon_present = body.avoid_amazon_present
+  if (body.amazon_fee_rate !== undefined) update.amazon_fee_rate = body.amazon_fee_rate
+  if (body.amazon_closing_fee !== undefined) update.amazon_closing_fee = body.amazon_closing_fee
 
   const service = createServiceClient()
   const { error } = await service

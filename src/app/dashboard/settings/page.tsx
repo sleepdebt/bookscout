@@ -8,7 +8,7 @@ export default async function SettingsPage() {
   const service = createServiceClient()
   const { data: rules } = await service
     .from('pricing_rules')
-    .select('target_roi_min, max_buy_price, slow_mover_rank_threshold, avoid_amazon_present')
+    .select('target_roi_min, max_buy_price, slow_mover_rank_threshold, avoid_amazon_present, amazon_fee_rate, amazon_closing_fee')
     .limit(1)
     .single()
 
@@ -17,6 +17,8 @@ export default async function SettingsPage() {
     max_buy_price: null,
     slow_mover_rank_threshold: null,
     avoid_amazon_present: true,
+    amazon_fee_rate: 0.15,
+    amazon_closing_fee: 1.80,
   }
 
   return (

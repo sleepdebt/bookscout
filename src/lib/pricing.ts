@@ -6,6 +6,8 @@ export interface PricingRules {
   max_buy_price: number | null
   slow_mover_rank_threshold: number | null
   avoid_amazon_present: boolean
+  amazon_fee_rate: number       // e.g. 0.15 = 15% referral fee
+  amazon_closing_fee: number    // flat per-item closing fee, e.g. 1.80
   category_overrides: Record<string, unknown>
 }
 
@@ -59,9 +61,12 @@ export function computeOffer(
   // Base offer: condition-adjusted price
   let offer = amazonPrice * multiplier
 
-  // ROI floor: we need to buy at most amazonPrice / (1 + target_roi_min)
-  // to guarantee the minimum ROI when reselling at amazon price
-  const roiCap = amazonPrice / (1 + rules.target_roi_min)
+  // Net proceeds after Amazon fees (referral % + flat closing fee)
+  const netProceeds = amazonPrice * (1 - rules.amazon_fee_rate) - rules.amazon_closing_fee
+
+  // ROI floor: buy at most netProceeds / (1 + target_roi_min)
+  // guarantees minimum ROI when reselling at amazon price after fees
+  const roiCap = netProceeds / (1 + rules.target_roi_min)
   if (offer > roiCap) {
     offer = roiCap
   }
