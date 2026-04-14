@@ -21,6 +21,9 @@ const pollerOne = Poller_One({
 export const metadata: Metadata = {
   title: 'BookScout',
   description: 'Sell your textbooks for fast cash. No account needed.',
+  icons: {
+    icon: '/favicon.png',
+  },
 };
 
 export const viewport = {
