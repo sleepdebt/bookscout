@@ -91,7 +91,7 @@ export async function POST(req: NextRequest) {
     .update({
       asin: product.asin,
       title: product.title ?? null,
-      amazon_data: product,
+      amazon_data: product as unknown as import('@/lib/supabase/types').Json,
       recommended_offer: offerResult.recommended_offer,
       confidence_level: offerResult.confidence_level,
       flags: offerResult.flags,
