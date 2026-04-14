@@ -70,14 +70,16 @@ export async function POST(req: NextRequest) {
     .limit(1)
     .single()
 
-  const rules: PricingRules = rulesRow ?? {
-    target_roi_min: 0.5,
-    max_buy_price: null,
-    slow_mover_rank_threshold: null,
-    avoid_amazon_present: true,
-    amazon_fee_rate: 0.15,
-    amazon_closing_fee: 1.80,
-    category_overrides: {},
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const row = rulesRow as any
+  const rules: PricingRules = {
+    target_roi_min:            row?.target_roi_min            ?? 0.5,
+    max_buy_price:             row?.max_buy_price             ?? null,
+    slow_mover_rank_threshold: row?.slow_mover_rank_threshold ?? null,
+    avoid_amazon_present:      row?.avoid_amazon_present      ?? true,
+    amazon_fee_rate:           row?.amazon_fee_rate           ?? 0.15,
+    amazon_closing_fee:        row?.amazon_closing_fee        ?? 1.80,
+    category_overrides:        row?.category_overrides        ?? {},
   }
 
   // 7. Compute offer
