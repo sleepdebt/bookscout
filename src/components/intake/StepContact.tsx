@@ -38,9 +38,20 @@ export function StepContact({ initialData, onComplete }: StepContactProps) {
         {/* Overlay with text */}
         <div className="absolute inset-0 bg-gradient-to-t from-blue-900/100 via-blue-900/75 to-blue-900/45 flex flex-col items-center justify-between px-6 pt-6 pb-5 text-center">
           {/* Book icon badge */}
-          <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
-            <svg className="w-9 h-9 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+          <div className="w-16 h-16 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 512 512">
+              <rect width="512" height="512" rx="112" fill="#111827"/>
+              <defs>
+                <linearGradient id="pages" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#ffffff"/>
+                  <stop offset="44%" stopColor="#ffffff"/>
+                  <stop offset="44%" stopColor="#374151"/>
+                  <stop offset="56%" stopColor="#374151"/>
+                  <stop offset="56%" stopColor="#9ca3af"/>
+                  <stop offset="100%" stopColor="#9ca3af"/>
+                </linearGradient>
+              </defs>
+              <rect x="136" y="172" width="240" height="168" rx="16" fill="url(#pages)"/>
             </svg>
           </div>
           {/* Bottom text */}
