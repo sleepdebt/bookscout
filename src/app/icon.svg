@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- Dark rounded square background -->
+  <rect width="512" height="512" rx="112" fill="#111827"/>
+
+  <defs>
+    <!-- Book pages: white left, dark spine, gray right -->
+    <linearGradient id="pages" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#ffffff"/>
+      <stop offset="44%"  stop-color="#ffffff"/>
+      <stop offset="44%"  stop-color="#374151"/>
+      <stop offset="56%"  stop-color="#374151"/>
+      <stop offset="56%"  stop-color="#9ca3af"/>
+      <stop offset="100%" stop-color="#9ca3af"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Book pages block -->
+  <rect x="136" y="172" width="240" height="168" rx="16" fill="url(#pages)"/>
+</svg>
